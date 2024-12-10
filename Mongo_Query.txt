@@ -1,0 +1,13 @@
+db.stock_management.createIndex({slug:"text",quantity:"text",price:"text"})
+
+db.stock_management.aggregate([
+  {
+    $match: {
+      $or: [
+        { slug: { $regex: "je", $options: "i" } },
+        { quantity: { $regex: "search-term", $options: "i" } },
+        { price: { $regex: "search-term", $options: "i" } }
+      ]
+    }
+  },
+])
