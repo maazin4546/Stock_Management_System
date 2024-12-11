@@ -1,16 +1,13 @@
-import Main from '../Components/Main'
-import Headers from '../Components/Headers'
+import Home from '../Components/Home'
 
 const page = () => {
 
-  const sum = "mazin"
-  const name = "abdullah"
-
   return (
-    <div className='bg_gradient'>
-        <Headers />
-        <Main />
-    </div>
+    <>
+      <div className='container mx-auto p-6'>
+        <Home />
+      </div>
+    </>
   )
 }
 

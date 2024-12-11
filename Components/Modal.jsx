@@ -1,13 +1,18 @@
-import React from 'react'
+'use client'
+import { useContext } from 'react';
+import { GenContext } from './ContextAPI';
 
-const Modal = ({ isModalOpen, toggleModal, handleUpdateChange, modalProduct, updateProduct }) => {
+const Modal = () => {
+
+    const {isModalOpen, toggleModal, handleUpdateChange, modalProduct, updateProduct} = useContext(GenContext)
+
     return (
         <div>
             {isModalOpen && (
                 <div
                     id="authentication-modal"
                     tabIndex="-1"
-                    aria-hidden="true"
+                    // aria-hidden="true"
                     className="fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full overflow-y-auto bg-black bg-opacity-50 flex"
                 >
                     <div className="relative p-4 w-full max-w-md max-h-full">
@@ -23,7 +28,7 @@ const Modal = ({ isModalOpen, toggleModal, handleUpdateChange, modalProduct, upd
                                 >
                                     <svg
                                         className="w-3 h-3"
-                                        aria-hidden="true"
+                                        // aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
                                         viewBox="0 0 14 14"

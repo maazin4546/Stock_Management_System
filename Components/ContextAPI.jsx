@@ -1,13 +1,9 @@
-'use client'
-import React, { useEffect, useState } from 'react';
-import Cart from './Cart';
-import Table from './Table';
-import Form from './Form';
-import SearchBar from './SearchBar';
-import Modal from './Modal';
+// Creaing Context
+"use client"
+import React, { createContext, useState, useEffect } from 'react'
+export const GenContext = createContext()
 
-
-const AddProducts = () => {
+export const ContextProvider = ({ children }) => {
 
     const [productForm, setproductForm] = useState({})
     const [products, setproducts] = useState([])
@@ -18,9 +14,10 @@ const AddProducts = () => {
     const [laodingAction, setlaodingAction] = useState(false)
     const [dropdown, setdropdown] = useState([])
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [tempProductList, setTempProductList] = useState([{ slug: "", quantity: "", price: "" }]);
+    const [confisModalOpen, setconfIsModalOpen] = useState(false);
+    const [cartProducts, setCartProducts] = useState([]);
     const [productList, setProductList] = useState([
-        { slug: '', quantity: '', price: '' }, // Ensure all fields have default values
+        { slug: '', quantity: '', price: '' },
     ]);
     const [showFields, setShowFields] = useState(false);
     const [modalProduct, setmodalProduct] = useState({
@@ -30,59 +27,8 @@ const AddProducts = () => {
         _id: ''
     })
 
-    const toggleModal = () => {
-        setIsModalOpen(!isModalOpen);
-    };
 
-
-    useEffect(() => {
-        const fetchProduct = async () => {
-            const response = await fetch('/api/product');
-            const rjson = await response.json();
-            if (rjson.Products) {
-                setproducts(rjson.Products);
-            } else {
-                console.error('API response does not contain "Products" key:', rjson);
-            }
-        };
-        fetchProduct();
-    }, []);
-
-    // const addProduct = async (e) => {
-    //     e.preventDefault();
-
-    //     // Ensure there's either a tempProductList or a single product
-    //     if (tempProductList.length === 0) {
-    //         return;
-    //     }
-
-    //     try {
-    //         const payload =
-    //             tempProductList.length === 1
-    //                 ? { products: tempProductList[0] } // Single product
-    //                 : { products: tempProductList };  // Multiple products
-
-    //         // Send the product(s) to the backend
-    //         const response = await fetch('/api/product', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify(payload),
-    //         });
-
-    //         if (response.ok) {
-    //             console.log('Product(s) added successfully');
-    //             setTempProductList([]); // Clear the temporary list
-    //         } else {
-    //             const errorText = await response.text();
-    //             console.error('Failed to add product(s):', errorText);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error occurred while adding product(s):', error);
-    //     }
-    // };
-
+    // ---------------------Form Fucntions----------------------------
     const addProduct = async () => {
         // Filter out empty or invalid products from productList
         const validProductList = productList.filter(
@@ -132,6 +78,14 @@ const AddProducts = () => {
         }
     };
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setproductForm((prevState) => ({
+            ...prevState,
+            [name]: value,  // Dynamically update the field name with the value
+        }));
+    };
+
     const handleInputChange = (index, event) => {
         const { name, value } = event.target;
         const updatedProducts = [...productList];
@@ -151,6 +105,15 @@ const AddProducts = () => {
     };
 
 
+    // ----------------Table Functions-----------------------
+    const confirmationtoggleModal = () => {
+        setconfIsModalOpen(!confisModalOpen);
+    };
+
+    const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+    };
+
     const deleteProduct = async (productId) => {
         try {
             const response = await fetch('/api/delete', {
@@ -158,20 +121,40 @@ const AddProducts = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id: productId }), // Send the product ID in the request body
+                body: JSON.stringify({ id: productId }),
             });
 
+            console.log('Response status:', response.status);
+            const result = await response.json();
+            console.log('Response data:', result);
+            setconfIsModalOpen(false);
+
             if (!response.ok) {
-                throw new Error('Failed to delete the product');
+                throw new Error(result.error || 'Failed to delete the product');
             }
 
-            const result = await response.json();
-            console.log('Product deleted successfully:', result);
-            setalert("Product has been deleted successfully!");
+            // Update state
+            setProductList((prevList) =>
+                prevList.filter((product) => product._id !== productId) // Ensure key consistency
+            );
+
         } catch (error) {
-            console.error('Error occurred while deleting product:', error);
+            console.log('Error occurred while deleting product:', error);
         }
     };
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            const response = await fetch('/api/product');
+            const rjson = await response.json();
+            if (rjson.Products) {
+                setproducts(rjson.Products);
+            } else {
+                console.error('API response does not contain "Products" key:', rjson);
+            }
+        };
+        fetchProduct();
+    }, []);
 
     const updateProduct = async () => {
         const updatedFields = {
@@ -212,16 +195,6 @@ const AddProducts = () => {
     };
 
 
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setproductForm((prevState) => ({
-            ...prevState,
-            [name]: value,  // Dynamically update the field name with the value
-        }));
-    };
-
-
     const handleUpdateChange = (e) => {
         const { name, value } = e.target;
         setmodalProduct((prevProducts) => ({
@@ -230,6 +203,8 @@ const AddProducts = () => {
         }));
     }
 
+
+    // ---------------------Searchbar Fucntions----------------------------
     const onDropdownEdit = async (e) => {
         setquery(e.target.value)
         if (!loading) {
@@ -261,32 +236,78 @@ const AddProducts = () => {
         }
     }
 
-    const addToCart = (product) => {
-        setCart([...cart, product]); // Add product to cart
+
+    // ------------Cart functions-------------------
+    const addToCart = async (productId, quantity) => {
+        try {
+            const response = await fetch('/api/cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productId, quantity }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log(data.message);
+            } else {
+                console.log(data.error);
+            }
+        } catch (err) {
+            console.log('Failed to add product to cart');
+        }
     };
 
+    const deleteProductFromCart = async (productId) => {
+        try {
+            const response = await fetch('/api/cart', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productId }),  // This should be properly stringified JSON
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log("deleted successfully"); // Success message
+                // Optionally, refresh the cart or update the UI
+            } else {
+                console.log(data.error); // Error message
+            }
+        } catch (error) {
+            console.error('Error deleting product:', error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchCartProducts = async () => {
+            try {
+                const response = await fetch('/api/cart');
+                const data = await response.json();
+
+                if (response.ok) {
+                    setCartProducts(data.cartProducts); // Set the cart products data
+                } else {
+                    console.log(data.error || 'Failed to fetch cart products');
+                }
+            } catch (err) {
+                console.log('Failed to fetch cart products');
+            }
+        };
+
+        fetchCartProducts();
+    }, []);
+
+
+
     return (
-        <div className='container mx-auto p-6'>
-
-            {/* Seach bar */}
-            <SearchBar query={query} onDropdownEdit={onDropdownEdit} setdropdown={setdropdown} loading={loading} dropdown={dropdown} buttonAction={buttonAction} laodingAction={laodingAction} />
-
-            {/* Form to add product */}
-            <Form addProductForm={addProductForm} handleInputChange={handleInputChange} showFields={showFields} setShowFields={setShowFields} productList={productList} setProductList={setProductList} alert={alert} handleChange={handleChange} tempProductList={tempProductList} setTempProductList={setTempProductList} productForm={productForm} setproductForm={setproductForm} addProduct={addProduct} />
-
-            {/* Table */}
-            <Table products={products} setmodalProduct={setmodalProduct} toggleModal={toggleModal} deleteProduct={deleteProduct} addToCart={addToCart} />
-
-            {/* Cart Table */}
-            <Cart cart={cart} setCart={setCart} />
-
-            {/* ModaL */}
-            <Modal isModalOpen={isModalOpen} toggleModal={toggleModal} handleUpdateChange={handleUpdateChange} modalProduct={modalProduct} updateProduct={updateProduct} />
-
-
-        </div>
-
-    );
+        <GenContext.Provider value={{ cartProducts, deleteProductFromCart, buttonAction, dropdown, query, onDropdownEdit, loading, laodingAction, cart, setCart, modalProduct, handleUpdateChange, updateProduct, isModalOpen, confirmationtoggleModal, addToCart, deleteProduct, toggleModal, setmodalProduct, products, confisModalOpen, alert, showFields, addProductForm, setProductList, handleInputChange, handleChange, addProduct, productForm, productList }}>
+            {children}
+        </GenContext.Provider>
+    )
 }
 
-export default AddProducts;
