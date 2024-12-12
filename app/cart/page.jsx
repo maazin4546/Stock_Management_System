@@ -1,7 +1,6 @@
 'use client'
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { GenContext } from '../../Components/ContextAPI';
-import { FaTrashAlt } from 'react-icons/fa';
 import Link from 'next/link';
 
 const Cart = () => {
@@ -45,7 +44,7 @@ const Cart = () => {
                     ₹{cartProducts.reduce((total, item) => total + parseFloat(item.price), 0)}
                   </td>
                   <td className="text-center px-4">
-                    <Link href="/payment">
+                    <Link href="https://buy.stripe.com/test_8wMg2w1ob6bd6wU6oo">
                       <button className="bg-green-600 text-white font-bold py-1 px-6 rounded hover:bg-green-700">
                         Pay
                       </button>
@@ -71,6 +70,7 @@ const Cart = () => {
         </div>
 
       )}
+
 
     </div>
   )

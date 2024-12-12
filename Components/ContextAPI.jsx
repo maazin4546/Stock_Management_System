@@ -73,10 +73,19 @@ export const ContextProvider = ({ children }) => {
 
             const result = await response.json();
             console.log("Product added successfully:", result);
+
+            // Clear the form fields and productList after successful submission
+            setproductForm({
+                slug: "",
+                quantity: "",
+                price: "",
+            });
+            setProductList([]); // Reset productList to an empty array
         } catch (error) {
             console.error("Error saving product:", error);
         }
     };
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -121,25 +130,19 @@ export const ContextProvider = ({ children }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id: productId }),
+                body: JSON.stringify({ productId }),
             });
 
-            console.log('Response status:', response.status);
-            const result = await response.json();
-            console.log('Response data:', result);
             setconfIsModalOpen(false);
 
-            if (!response.ok) {
-                throw new Error(result.error || 'Failed to delete the product');
+            if (response.ok) {
+                console.log("deleted successfully"); // Success message
+                // Optionally, refresh the cart or update the UI
+            } else {
+                console.log(data.error); // Error message
             }
-
-            // Update state
-            setProductList((prevList) =>
-                prevList.filter((product) => product._id !== productId) // Ensure key consistency
-            );
-
         } catch (error) {
-            console.log('Error occurred while deleting product:', error);
+            console.error('Error deleting product:', error);
         }
     };
 

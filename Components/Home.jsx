@@ -6,7 +6,7 @@ const Home = () => {
             <div className="min-h-screen bg-gradient-to-r from-gray-800 to-gray-900 flex flex-col justify-center items-center text-white">
                 <header className="bg-white bg-opacity-20 shadow-lg w-full">
                     <div className="container mx-auto p-6 text-center">
-                        <h1 className="text-2xl sm:text-5xl font-extrabold text-white drop-shadow-lg">Welcome to Stock Management System</h1>
+                        <h1 className="text-2xl sm:text-5xl rounded-md font-extrabold text-white drop-shadow-lg">Welcome to Stock Management System</h1>
                     </div>
                 </header>
 
@@ -24,7 +24,7 @@ const Home = () => {
                     </section>
                 </main>
 
-                <footer className="bg-white bg-opacity-20 shadow-lg mt-8 w-full">
+                <footer className="bg-white rounded-mdd bg-opacity-20 shadow-lg mt-8 w-full">
                     <div className="container mx-auto p-6 text-center">
                         <p className="text-white">© 2024 Stock Management System</p>
                     </div>
