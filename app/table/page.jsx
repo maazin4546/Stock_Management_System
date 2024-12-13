@@ -6,6 +6,7 @@ import * as XLSX from 'xlsx';
 import ConfirmationModal from '../../Components/ConfirmationModal';
 import Modal from '../../Components/Modal';
 import SearchBar from '../../Components/SearchBar';
+import Toast from '../../Components/Toast';
 
 const Table = () => {
 
@@ -28,6 +29,7 @@ const Table = () => {
     return (
         <div className='container mx-auto p-12'>
             <SearchBar />
+            <Toast/>
             <h1 className='text-3xl text-white mt-10 font-bold mb-4 text-center'>Display the Current Stock</h1>
 
             <div className="overflow-x-auto">

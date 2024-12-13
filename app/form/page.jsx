@@ -2,6 +2,7 @@
 import { useContext } from 'react';
 import { GenContext } from '../../Components/ContextAPI';
 import { FaTrashAlt } from 'react-icons/fa';
+import Toast from "../../Components/Toast"
 
 const Form = () => {
 
@@ -10,11 +11,11 @@ const Form = () => {
         setProductList(updatedList); // Update the state
     };
 
-    const { showFields, alert, addProductForm, setProductList, addProduct, productForm, productList, handleChange, handleInputChange } = useContext(GenContext)
+    const { showFields, addProductForm, setProductList, addProduct, productForm, productList, handleChange, handleInputChange } = useContext(GenContext)
 
     return (
         <div>
-            <div className='text-green-700 text-center'>{alert}</div>
+        <Toast/>
             <h1 className='text-3xl text-white font-bold mb-4 text-center mt-6'>Add a Product</h1>
 
             <form className="bg-gray-900 shadow-xl rounded-lg px-10 sm:px-12 py-8 sm:py-14 mb-8 w-[80%] sm:max-w-md mx-auto">
