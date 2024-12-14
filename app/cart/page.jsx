@@ -45,14 +45,12 @@ const Cart = () => {
                   <td className="text-center font-bold py-2 px-4 text-white">
                     ₹{cartProducts.reduce((total, item) => total + parseFloat(item.price), 0)}
                   </td>
-                  <td className="text-center px-4">
-                    {/* <Link href="https://buy.stripe.com/test_8wMg2w1ob6bd6wU6oo"> */}
+                  <td className="text-center px-4">               
                     <button
                       onClick={payment_function}
                       className="bg-green-600 text-white font-bold py-1 px-6 rounded hover:bg-green-700">
                       Pay
-                    </button>
-                    {/* </Link> */}
+                    </button>                  
                   </td>
                 </tr>
               </tfoot>

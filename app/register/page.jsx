@@ -6,7 +6,6 @@ import emailValidator from 'email-validator';
 import "react-phone-input-2/lib/style.css";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { CgGoogle, CgFacebook, CgGitFork } from "react-icons/cg"
-import axios from "axios";
 import { NextResponse } from "next/server";
 import { useRouter } from "next/navigation";
 import Toast from "../../Components/Toast";

@@ -25,10 +25,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg_gradient`}
       >
-        <ContextProvider>
-          <Navbar />
+          <ContextProvider>
+            <Navbar />
             {children}
-        </ContextProvider>
+          </ContextProvider>
       </body>
     </html>
   );
