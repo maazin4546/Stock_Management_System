@@ -3,7 +3,6 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { CgGoogle, CgFacebook, CgGitFork } from "react-icons/cg"
-// import { signIn } from "next-auth/react";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import emailValidator from 'email-validator';
 import Toast from "../../Components/Toast";
@@ -73,24 +72,9 @@ const Login = () => {
     };
 
 
-    // * Google login
-    // const googleLogin = async () => {
-    //     await signIn("google", {
-    //         callbackUrl: "/",
-    //         redirect: true,
-    //     });
-    // };
-
-    // * Github signin
-    // const onGithubSignUp = () => {
-    //     signIn("github", {
-    //         callbackUrl: "/",
-    //     });
-    // };
-
     return (
         <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 pt-10">
-        <Toast/>
+            <Toast />
             <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
                 <h1 className="text-3xl font-bold text-center mb-6 text-gray-700">
                     {loading ? "Processing..." : "Login"}
@@ -144,37 +128,6 @@ const Login = () => {
                 >
                     {buttondisabled ? "No Login" : "Login"}
                 </button>
-
-                <div className="my-6">
-                    <div className="flex justify-center space-x-3">
-                        {/* Google Button */}
-                        <button
-                            className="flex items-center px-4 py-2 text-white bg-red-500 hover:bg-red-600 rounded-lg shadow-lg font-medium"
-                        // onClick={googleLogin}
-                        >
-                            <CgGoogle className="w-5 h-5 mr-2" />
-                            Google
-                        </button>
-
-                        {/* Facebook Button */}
-                        <button
-                            className="flex items-center px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-lg font-medium"
-                        // onClick={onFacebookSignUp} // Define this function for Facebook OAuth
-                        >
-                            <CgFacebook className="w-5 h-5 mr-2" />
-                            Facebook
-                        </button>
-
-                        {/* GitHub Button */}
-                        <button
-                            className="flex items-center px-4 py-2 text-white bg-gray-800 hover:bg-gray-900 rounded-lg shadow-lg font-medium"
-                        // onClick={onGithubSignUp} // Define this function for GitHub OAuth
-                        >
-                            <CgGitFork className="w-5 h-5 mr-2" />
-                            GitHub
-                        </button>
-                    </div>
-                </div>
 
                 <p className="text-sm text-center text-gray-500 mt-4">
                     Don't have an account?{" "}
